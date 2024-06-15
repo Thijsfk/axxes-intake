@@ -1,4 +1,5 @@
 ﻿using GildedTros.App.Helper;
+using GildedTros.App.Service;
 using System;
 using System.Collections.Generic;
 
@@ -14,11 +15,18 @@ namespace GildedTros.App
 
         public void UpdateQuality()
         {
+            var updatedList = new List<Item>();
+            var processor = new ItemProcessingService();
+
             foreach (var item in Items)
             {
-                var type = ItemTypeHelper.GetItemType(item);
-                Console.WriteLine(type);
+                var updatedItem = processor.ProcessItem(item, ItemTypeHelper.GetItemType(item));
+                updatedList.Add(updatedItem);
             }
+
+            Items = updatedList;
+
+            return;
 
             for (var i = 0; i < Items.Count; i++)
             {
