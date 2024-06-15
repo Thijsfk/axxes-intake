@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GildedTros.App.Helper;
+using System;
+using System.Collections.Generic;
 
 namespace GildedTros.App
 {
@@ -12,6 +14,12 @@ namespace GildedTros.App
 
         public void UpdateQuality()
         {
+            foreach (var item in Items)
+            {
+                var type = ItemTypeHelper.GetItemType(item);
+                Console.WriteLine(type);
+            }
+
             for (var i = 0; i < Items.Count; i++)
             {
                 if (Items[i].Name != "Good Wine" 
