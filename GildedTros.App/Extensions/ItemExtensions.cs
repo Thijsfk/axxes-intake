@@ -1,14 +1,37 @@
-﻿using GildedTros.App.Enum;
+﻿using GildedTros.App;
+using GildedTros.App.Enum;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 namespace GildedTros.App.Helper
 {
     static class ItemExtensions
     {
+        private static readonly int _qualityMax = 50;
+        private static readonly int _qualityMin = 0;
+
         private static readonly Dictionary<string, ItemType> _itemsByName = new Dictionary<string, ItemType>()
         {
-            { "Ring of Cleansening Code", ItemType.Normal }
+            { "Ring of Cleansening Code", ItemType.Normal },
+            { "Good Wine", ItemType.GoodWine },
+            { "Elixir of the SOLID", ItemType.Normal },
+            { "B-DAWG Keychain", ItemType.Legendary },
+            { "Backstage passes for Re:factor", ItemType.BackstagePass },
+            { "Backstage passes for HAXX", ItemType.BackstagePass },
+            { "Duplicate Code", ItemType.Smelly },
+            { "Long Methods", ItemType.Smelly },
+            { "Ugly Variable Names", ItemType.Smelly }
         };
+
+        public static int QualityMax(this Item item)
+        {
+            return _qualityMax;
+        }
+        
+        public static int QualityMin(this Item item)
+        {
+            return _qualityMin;
+        }
 
         public static ItemType GetItemType(this Item item)
         {
@@ -21,14 +44,9 @@ namespace GildedTros.App.Helper
             return ItemType.Unknown;
         }
 
-        public static bool HasRestrictedQuality(this Item item)
+        public static bool HasExpired(this Item item)
         {
-            if (item.Quality < 50 && item.Quality != 0)
-            {
-                return false;
-            }
-
-            return true;
+            return item.SellIn < 0;
         }
     }
 }
