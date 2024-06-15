@@ -20,7 +20,7 @@ namespace GildedTros.App
 
             foreach (var item in Items)
             {
-                var updatedItem = processor.ProcessItem(item, ItemTypeHelper.GetItemType(item));
+                var updatedItem = processor.ProcessItem(item);
                 updatedList.Add(updatedItem);
             }
 

@@ -1,4 +1,5 @@
 ﻿using GildedTros.App.Enum;
+using GildedTros.App.Helper;
 using System;
 
 namespace GildedTros.App.Service
@@ -9,21 +10,23 @@ namespace GildedTros.App.Service
         // Expand with all item type logic
         // Check if service is necessary or static helper (testing?)
 
-        public Item ProcessItem(Item item, ItemType type)
+        public Item ProcessItem(Item item)
         {
-            item.Quality += 1;
+            item = UpdateQuality(item);
 
             return item;
         }
 
-        private Item UpdateQuality(Item item, ItemType type)
+        private Item UpdateQuality(Item item)
         {
-            if (hasRestrictedQuality(item))
+            if (item.HasRestrictedQuality())
             {
                 return item;
             }
 
-            switch (type)
+            var itemType = item.GetItemType();
+
+            switch (itemType)
             {
                 case ItemType.Legendary:
                     return item;
@@ -37,18 +40,10 @@ namespace GildedTros.App.Service
                     break;
                 case ItemType.Unknown:
                 default:
-                    throw new ArgumentException($"Unknown itemtype was given: {type}");
-            }
-        }
-
-        private bool hasRestrictedQuality(Item item)
-        {
-            if (item.Quality < 50 && item.Quality != 0)
-            {
-                return false;
+                    throw new ArgumentException($"Unknown itemtype was given: {itemType}");
             }
 
-            return true;
+            return item;
         }
     }
 }
