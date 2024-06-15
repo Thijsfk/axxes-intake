@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace GildedTros.App
 {
+    // todo dependency injection (if possibe)
+
     public class GildedTros
     {
         IList<Item> Items;
@@ -16,11 +18,11 @@ namespace GildedTros.App
         public void UpdateQuality()
         {
             var updatedList = new List<Item>();
-            var processor = new ItemProcessingService();
 
             foreach (var item in Items)
             {
-                var updatedItem = processor.ProcessItem(item);
+                var processor = new ItemProcessingService(item);
+                var updatedItem = processor.ProcessItem();
                 updatedList.Add(updatedItem);
             }
 

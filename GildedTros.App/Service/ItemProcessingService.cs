@@ -6,6 +6,14 @@ namespace GildedTros.App.Service
 {
     public class ItemProcessingService
     {
+        private readonly Item _item;
+        private readonly ItemType _itemType;
+
+        public ItemProcessingService(Item item) {
+            _item = item;
+            _itemType = item.GetItemType();
+        }
+
         // TODO 
         // Expand with all item type logic
         // Check if service is necessary or static helper (testing?)
@@ -13,100 +21,90 @@ namespace GildedTros.App.Service
         // comments
         // tests (if type with input should be type) (not private?)
 
-        public Item ProcessItem(Item item)
+        public Item ProcessItem()
         {
-            item = UpdateSellIn(item);
-            item = UpdateQuality(item);
+            UpdateSellIn();
+            UpdateQuality();
 
-            return item;
+            return _item;
         }
 
-        private Item UpdateSellIn(Item item)
+        private void UpdateSellIn()
         {
-            if (item.GetItemType() == ItemType.Legendary)
+            if (_itemType == ItemType.Legendary)
             {
-                return item;
+                return;
             }
 
-            item.SellIn--;
-
-            return item;
+            _item.SellIn--;
         }
 
-        private Item UpdateQuality(Item item)
+        private void UpdateQuality()
         {
-            var itemType = item.GetItemType();
-
-            switch (itemType)
+            switch (_itemType)
             {
                 case ItemType.Legendary:
                     break;
                 case ItemType.Normal:
                 case ItemType.Smelly:
-                    item = DecreaseQuality(item);
+                    DecreaseQuality();
                     break;
                 case ItemType.GoodWine:
                 case ItemType.BackstagePass:
-                    item = IncreaseQuality(item);
+                    IncreaseQuality();
                     break;
                 case ItemType.Unknown:
                 default:
-                    throw new ArgumentException($"Unknown itemtype was given: {itemType}");
+                    throw new ArgumentException($"Unknown itemtype in instance: {_itemType}");
             }
-
-            return item;
         }
 
-        private Item DecreaseQuality(Item item)
+        private void DecreaseQuality()
         {
             var degradeBy = 1;
 
-            if (item.GetItemType() == ItemType.Smelly)
+            if (_itemType == ItemType.Smelly)
             {
                 degradeBy = 2;
             }
 
-            if (item.SellIn < 0)
+            if (_item.SellIn < 0)
             {
                 degradeBy *= 2;
             }
 
-            item.Quality -= degradeBy;
+            _item.Quality -= degradeBy;
 
-            if (item.Quality < item.QualityMin())
+            if (_item.Quality < _item.QualityMin())
             {
-                item.Quality = item.QualityMin();
+                _item.Quality = _item.QualityMin();
             }
-
-            return item;
         }
 
-        private Item IncreaseQuality(Item item)
+        private void IncreaseQuality()
         {
-            item.Quality++;
+            _item.Quality++;
 
-            if (item.GetItemType() == ItemType.BackstagePass)
+            if (_itemType == ItemType.BackstagePass)
             {
-                if (item.SellIn <= 10 && item.SellIn > 5)
+                if (_item.SellIn <= 10 && _item.SellIn > 5)
                 {
-                    item.Quality++;
+                    _item.Quality++;
                 }
-                else if (item.SellIn <= 5 && !item.HasExpired())
+                else if (_item.SellIn <= 5 && !_item.HasExpired())
                 {
-                    item.Quality += 2;
+                    _item.Quality += 2;
                 }
-                else if (item.HasExpired())
+                else if (_item.HasExpired())
                 {
-                    item.Quality = item.QualityMin();
+                    _item.Quality = _item.QualityMin();
                 }
             }
 
-            if (item.Quality >= item.QualityMax())
+            if (_item.Quality >= _item.QualityMax())
             {
-                item.Quality = item.QualityMax();
+                _item.Quality = _item.QualityMax();
             }
-
-            return item;
         }
     }
 }
