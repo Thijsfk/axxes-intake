@@ -1,10 +1,12 @@
 ﻿using GildedTros.App.Enum;
 using GildedTros.App.Helper;
+using GildedTros.App.Interface;
 using System;
 
 namespace GildedTros.App.Service
 {
-    public class ItemProcessingService
+    /// <inheritdoc />
+    public class ItemProcessingService : IItemProcessingService
     {
         private readonly Item _item;
         private readonly ItemType _itemType;
@@ -20,10 +22,6 @@ namespace GildedTros.App.Service
             _itemType = type;
         }
 
-        // TODO 
-        // comments
-        // tests (if type with input should be type) (not private?)
-
         public Item ProcessItem()
         {
             UpdateSellIn();
@@ -32,6 +30,9 @@ namespace GildedTros.App.Service
             return _item;
         }
 
+        /// <summary>
+        /// Update item sellIn value based on type
+        /// </summary>
         private void UpdateSellIn()
         {
             if (_itemType == ItemType.Legendary)
@@ -42,6 +43,10 @@ namespace GildedTros.App.Service
             _item.SellIn--;
         }
 
+        /// <summary>
+        /// Update item quality based on type
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
         private void UpdateQuality()
         {
             switch (_itemType)
@@ -62,14 +67,16 @@ namespace GildedTros.App.Service
             }
         }
 
+        /// <summary>
+        /// Decrease the quality value of an item depending on type and sellIn value
+        /// </summary>
         private void DecreaseQuality()
         {
             var degradeBy = 1;
 
             if (_itemType == ItemType.Smelly)
             {
-                // Requirements say smelly items degrade twice as fast, yet the ApprovalTest expects 
-                // degredation of 1
+                // Requirements say smelly items degrade twice as fast, yet the ApprovalTest expects degredation of 1
                 
                 //degradeBy = 2;
                 degradeBy = 1;
@@ -88,6 +95,9 @@ namespace GildedTros.App.Service
             }
         }
 
+        /// <summary>
+        /// Increase the quality value of an item depending on type and sellIn value
+        /// </summary>
         private void IncreaseQuality()
         {
             _item.Quality++;

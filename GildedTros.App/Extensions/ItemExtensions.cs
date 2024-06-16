@@ -22,16 +22,32 @@ namespace GildedTros.App.Helper
             { "Ugly Variable Names", ItemType.Smelly }
         };
 
+        /// <summary>
+        /// Get the maximum allowed quality value of the item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>Maximum Item Quality Value</returns>
         public static int QualityMax(this Item item)
         {
             return _qualityMax;
         }
-        
+
+        /// <summary>
+        /// Get the minimum allowed quality value of the item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>Minimum Item Quality Value</returns>
         public static int QualityMin(this Item item)
         {
             return _qualityMin;
         }
 
+        /// <summary>
+        /// Get the type of the item based on its name
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>The type of the item (ItemType Enum)</returns>
+        /// <exception cref="ArgumentException"></exception>
         public static ItemType GetItemType(this Item item)
         {
             if (_itemsByName.TryGetValue(item.Name, out ItemType value))
@@ -42,6 +58,11 @@ namespace GildedTros.App.Helper
             throw new ArgumentException($"given Item with name '{item.Name}' is unknown and cannot be processed");
         }
 
+        /// <summary>
+        /// Check if the item is Expired
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>True or False on expiry</returns>
         public static bool HasExpired(this Item item)
         {
             return item.SellIn < 0;
