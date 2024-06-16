@@ -1,7 +1,6 @@
-﻿using GildedTros.App;
-using GildedTros.App.Enum;
+﻿using GildedTros.App.Enum;
+using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 
 namespace GildedTros.App.Helper
 {
@@ -10,7 +9,7 @@ namespace GildedTros.App.Helper
         private static readonly int _qualityMax = 50;
         private static readonly int _qualityMin = 0;
 
-        private static readonly Dictionary<string, ItemType> _itemsByName = new Dictionary<string, ItemType>()
+        private static readonly Dictionary<string, ItemType> _itemsByName = new()
         {
             { "Ring of Cleansening Code", ItemType.Normal },
             { "Good Wine", ItemType.GoodWine },
@@ -40,8 +39,7 @@ namespace GildedTros.App.Helper
                 return value;
             }
 
-            //throw new ArgumentException($"given Item with name '{item.Name}' is unknown and cannot be processed");
-            return ItemType.Unknown;
+            throw new ArgumentException($"given Item with name '{item.Name}' is unknown and cannot be processed");
         }
 
         public static bool HasExpired(this Item item)

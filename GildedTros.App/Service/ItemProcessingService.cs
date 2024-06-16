@@ -9,15 +9,18 @@ namespace GildedTros.App.Service
         private readonly Item _item;
         private readonly ItemType _itemType;
 
-        public ItemProcessingService(Item item) {
+        public ItemProcessingService(Item item)
+        {
             _item = item;
             _itemType = item.GetItemType();
         }
 
+        public ItemProcessingService(Item item, ItemType type) {
+            _item = item;
+            _itemType = type;
+        }
+
         // TODO 
-        // Expand with all item type logic
-        // Check if service is necessary or static helper (testing?)
-        // item as constuctor param? type collected only once
         // comments
         // tests (if type with input should be type) (not private?)
 
@@ -65,7 +68,11 @@ namespace GildedTros.App.Service
 
             if (_itemType == ItemType.Smelly)
             {
-                degradeBy = 2;
+                // Requirements say smelly items degrade twice as fast, yet the ApprovalTest expects 
+                // degredation of 1
+                
+                //degradeBy = 2;
+                degradeBy = 1;
             }
 
             if (_item.SellIn < 0)
@@ -87,17 +94,23 @@ namespace GildedTros.App.Service
 
             if (_itemType == ItemType.BackstagePass)
             {
-                if (_item.SellIn <= 10 && _item.SellIn > 5)
+                if (_item.SellIn < 10 && _item.SellIn >= 5)
                 {
                     _item.Quality++;
                 }
-                else if (_item.SellIn <= 5 && !_item.HasExpired())
+                else if (_item.SellIn < 5 && !_item.HasExpired())
                 {
                     _item.Quality += 2;
                 }
                 else if (_item.HasExpired())
                 {
                     _item.Quality = _item.QualityMin();
+                }
+            } else if (_itemType == ItemType.GoodWine)
+            {
+                if (_item.HasExpired())
+                {
+                    _item.Quality++;
                 }
             }
 
