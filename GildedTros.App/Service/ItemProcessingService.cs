@@ -76,7 +76,7 @@ namespace GildedTros.App.Service
 
             if (_itemType == ItemType.Smelly)
             {
-                // Requirements say smelly items degrade twice as fast, yet the ApprovalTest expects degredation of 1
+                // TODO: This would cover the 'new feature', but will make the approval test fail
                 
                 //degradeBy = 2;
                 degradeBy = 1;
